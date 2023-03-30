@@ -1,5 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
 from urllib.parse import urlparse
+import re
 
 
 def discretize_values(column, key):
@@ -25,4 +26,15 @@ def url_protocol(url):
         return 'HTTP'
     else:
         return 'Not Specified'
+    
+    
+def find_anomalies(url):
+
+    domain = str(urlparse(url).hostname)
+    pattern = re.search(domain, url)
+
+    if pattern:
+        return 1
+    else:
+        return 0
     
