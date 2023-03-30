@@ -24,7 +24,7 @@ def plot_distribution(dataset):
     # fig.savefig()
 
 
-def protocol_dist(dataset):
+def feature_dist(dataset, key):
 
-    sns.countplot(x='protocol', data=dataset, palette='Greens')
+    sns.countplot(x=key, data=dataset, palette='Greens')
     plt.show()
