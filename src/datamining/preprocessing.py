@@ -37,4 +37,20 @@ def find_anomalies(url):
         return 1
     else:
         return 0
-    
+
+
+def url_length(dataset):
+
+    dataset['url_length'] = dataset['url'].apply(lambda x: len(x))
+    return dataset
+
+
+def count_digits(url):
+
+    total = 0
+
+    for c in url:
+        if c.isnumeric():
+            total += 1
+
+    return total

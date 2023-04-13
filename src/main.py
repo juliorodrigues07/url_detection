@@ -3,6 +3,8 @@ from datamining.data_visualization import feature_dist
 from datamining.preprocessing import discretize_values
 from datamining.preprocessing import find_anomalies
 from datamining.preprocessing import url_protocol
+from datamining.preprocessing import count_digits
+from datamining.preprocessing import url_length
 from datamining.ml_methods import xgb_classification
 from datamining.ml_methods import holdout_split
 from datamining.ml_methods import decision_tree
@@ -30,10 +32,14 @@ def main():
     # TODO: Balance database (instance selection)
     plot_distribution(url_dataset)
 
+    # TODO: Reduce range -> Condense sets of values in an unique attribute and normalize
+    # url_dataset = url_length(url_dataset.copy())
+    # url_dataset['number-of-digits'] = url_dataset['url'].apply(lambda x: count_digits(x))
+
     attributes = url_dataset.drop(['type'], axis='columns')
     attributes = discretize_values(attributes.copy(), 'url')
 
-    classes = url_dataset.drop(['url'], axis='columns') 
+    classes = url_dataset.drop(['url'], axis='columns')
     classes = discretize_values(classes.copy(), 'type')
 
     # url_dataset['protocol'] = url_dataset['url'].apply(lambda x: url_protocol(x))
