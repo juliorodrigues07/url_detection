@@ -14,6 +14,10 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [scikit-learn](https://scikit-learn.org/stable/index.html) library:
 
       pip install -U scikit-learn
+      
+- [xgboost](https://xgboost.readthedocs.io/en/stable/) library:
+ 
+      pip install xgboost
        
 - [pandas](https://pandas.pydata.org/) library:
 
@@ -26,6 +30,14 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [seaborn](https://seaborn.pydata.org/) library:
  
       pip install seaborn
+      
+- [joblib](https://joblib.readthedocs.io/en/latest/index.html) library:
+ 
+      pip install joblib
+      
+- [numpy](https://numpy.org/) library:
+
+      pip install numpy
        
 - To install all dependencies:
 
