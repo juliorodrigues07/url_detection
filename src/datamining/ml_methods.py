@@ -4,12 +4,14 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from joblib import dump
 from os import getcwd
+import matplotlib.pyplot as plt
 
 
 def holdout_split(attributes, classes):
@@ -33,7 +35,7 @@ def decision_tree(training_attributes, test_attributes, training_classes, test_c
 
     # Extraction of the obtained test results
     predictions = classifier.predict(test_attributes)
-    print(classification_report(test_classes, predictions, target_names=class_names))
+    summary(class_names, test_classes, predictions)
 
     return classifier.feature_importances_
 
@@ -44,7 +46,7 @@ def svm_model(training_attributes, test_attributes, training_classes, test_class
     classifier.fit(training_attributes, training_classes)
 
     predictions = classifier.predict(test_attributes)
-    print(classification_report(test_classes, predictions, target_names=class_names))
+    summary(class_names, test_classes, predictions)
 
     perm_importance = permutation_importance(classifier, test_attributes, test_classes)
     return perm_importance
@@ -56,7 +58,7 @@ def logistic_regression(training_attributes, test_attributes, training_classes, 
     classifier.fit(training_attributes, training_classes)
 
     predictions = classifier.predict(test_attributes)
-    print(classification_report(test_classes, predictions, target_names=class_names))
+    summary(class_names, test_classes, predictions)
 
     perm_importance = permutation_importance(classifier, test_attributes, test_classes)
     return perm_importance
@@ -76,8 +78,8 @@ def xgb_classification(training_attributes, test_attributes, training_classes, t
     xgb_clf.fit(training_attributes, training_classes)
     predictions = xgb_clf.predict(test_attributes)
 
-    print(classification_report(test_classes, predictions, target_names=class_names))
-    dump(xgb_clf, f'{getcwd()}/models/inital_xgb_model.sav')
+    summary(class_names, test_classes, predictions)
+    # dump(xgb_clf, f'{getcwd()}/models/inital_xgb_model.sav')
 
     return xgb_clf.feature_importances_
 
@@ -91,5 +93,18 @@ def cv_learning(attributes, classes, classifier):
 
     print(f'F1 Score Mean: {scores.mean()}')
     print(f'F1 Score StD:  {scores.std()}')
+
+
+def summary(class_names, test_classes, predictions):
+
+    print(classification_report(test_classes, predictions, target_names=class_names))
+
+    ConfusionMatrixDisplay.from_predictions(test_classes, predictions,
+                                            display_labels=class_names, cmap='Blues', xticks_rotation='vertical')
+
+    plt.title('Matriz de Confusão (XGBoost)')
+    plt.xlabel('Predições')
+    plt.ylabel('Classe Real')
+    plt.show()
 
 # TODO: Save trained models after tuning
