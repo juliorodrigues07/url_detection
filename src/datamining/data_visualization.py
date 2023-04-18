@@ -1,11 +1,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pandas import DataFrame
+from numpy import array
 
 
 def plot_distribution(dataset):
 
     # Statistical summary (mean, minimum, maximum, standard deviation, quartiles, ...)
-    # print(url_data.describe().transpose())
+    # print(dataset.describe().transpose())
 
     split = dataset.type.value_counts()
 
@@ -24,7 +26,59 @@ def plot_distribution(dataset):
     # fig.savefig()
 
 
+def pie_chart(dataset, names):
+
+    colors = sns.color_palette('pastel')[0:5]
+    split = dataset.type.value_counts()
+    plt.pie(split, colors=colors, shadow=True, startangle=45, autopct='%.0f%%')
+
+    plt.title('Class Distribution')
+    plt.legend(names, loc="best")
+    plt.axis('equal')
+    plt.show()
+
+
 def feature_dist(dataset, key):
 
-    sns.countplot(x=key, data=dataset, palette='Greens')
+    # plt.title('Protocol')
+    sns.countplot(x=key, data=dataset, palette='Blues')
+    plt.ylabel('Instances')
+    plt.show()
+
+
+def url_len_boxplot(dataset):
+
+    fig, axes = plt.subplots(figsize=(18, 10))
+    sns.boxplot(ax=axes, x='type', y='url_length', data=dataset)
+
+    axes.set_title('URL lengths between each type')
+    axes.set_xlabel('URL Length')
+    axes.set_xlabel('Type')
+    plt.show()
+
+
+def plot_feature_importance(cols, feature_dataframe):
+
+    feature_data = DataFrame({'Feature': cols, 'Feature Relevance': feature_dataframe['Mean'].values})
+    feature_data = feature_data.sort_values(by='Feature Relevance', ascending=False)
+
+    plt.figure(figsize=(10, 12))
+    plt.title('Average Feature Importance (XGBoost)', fontsize=14)
+
+    s = sns.barplot(y='Feature', x='Feature Relevance', data=feature_data, orient='h', palette='coolwarm')
+    s.set_xticklabels(s.get_xticklabels(), rotation=90)
+
+    plt.show()
+
+
+def calculate_importances(perm_importances, features_names):
+
+    features = array(features_names)
+    sorted_idx = perm_importances.importances_mean.argsort()
+
+    plt.barh(features[sorted_idx], perm_importances.importances_mean[sorted_idx])
+    plt.title('Permutation Feature Importance')
+    plt.ylabel('Feature')
+    plt.xlabel("Feature Relevance")
+
     plt.show()
