@@ -1,7 +1,7 @@
 [![Python 3.10.6](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3106/)
 ![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white)
 ![Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)
-# URL Detector
+# URL Detector (More Features, Preprocessing and Cross-Validation)
 
 Malicious URL Detector built utilizing several data mining, machine learning and data science concepts, techniques and algorithms.
 
