@@ -1,0 +1,155 @@
+\documentclass{beamer}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage[CJKmath=true, AutoFakeBold = true]{xeCJK}
+% \usepackage[T1]{fontenc}
+\setCJKmainfont{AR PL KaitiM GB}
+\usepackage{latexsym,xcolor,multicol,booktabs,calligra}
+\usepackage{amssymb,amsfonts,amsmath,amsthm,mathrsfs,mathptmx}
+\usepackage{graphicx,pstricks,listings,stackengine}
+\usefonttheme[onlymath]{serif}
+\usepackage[brazil]{babel}
+
+\renewcommand{\today}{4 de Maio de 2023}
+\renewcommand{\alert}[1]{\textbf{\color{swufe}#1}}
+
+\author[Julio Rodrigues (UFSJ)]{Julio Cesar da Silva Rodrigues\inst{1}}
+\title[Proposta - TP2]{Detecção de URLs Maliciosas}
+\subtitle{Mineração de Dados Aplicada}
+\institute[UFSJ]
+{
+    \inst{1} 
+    Universidade Federal de São João del-Rei \\
+    Curso de Ciência da Computação \\
+    \textit{julio.csr.271@aluno.ufsj.edu.br}\\
+}
+
+\usetheme{Warsaw}
+\setbeamertemplate{page number in head/foot}[totalframenumber]
+% \usepackage{SWUFE}
+
+\def\cmd#1{\texttt{\color[RGB]{0, 0, 139}\footnotesize $\backslash$#1}}
+\def\env#1{\texttt{\color[RGB]{0, 0, 139}\footnotesize #1}}
+
+\lstset{
+    language=[LaTeX]TeX,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries\color[RGB]{0, 0, 139},
+    stringstyle=\color[RGB]{50, 50, 50},
+    numbers=left,
+    numberstyle=\small\color{gray},
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    frame=shadowbox,
+}
+
+\begin{document}
+
+\begin{frame}[plain]
+    \titlepage
+    \vspace*{-2cm}
+    \begin{figure}[htpb]
+        \begin{center}
+            \includegraphics[width=0.4\linewidth]{pic/LogoUFSJ.PNG}
+        \end{center}
+    \end{figure}
+    \begin{center}
+        \footnotesize 4 de Maio de 2023
+    \end{center}
+\end{frame}
+
+\begin{frame}{Conteúdo}
+    \tableofcontents[sectionstyle=show,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/shaded/hide]
+\end{frame}
+
+\section{Contextualização}
+
+\begin{frame}{Conteúdo} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{URLs Maliciosas}
+
+    \begin{itemize}[<+-| alert@+>]
+        \setlength{\itemsep}{10pt}
+        \item Via rápida e direta para aplicar crimes cibernéticos;
+        \item Potencial de infecção exponencial;
+        \item Brasil no Top 15 com maior número de vítimas \cite{evilurl};
+        \item Evolução nas técnicas de camuflagem e detecção.
+    \end{itemize}
+    
+\end{frame}
+
+\section{Motivação}
+
+\begin{frame}{Conteúdo} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Perguntas e Objetivos}
+    
+    \begin{itemize}[<+-| alert@+>]
+        \setlength{\itemsep}{10pt}
+        \item Quais são as principais características que definem a natureza de uma URL?
+        \item Existe vantagem na aplicação de \emph{instance selection} em balanceamento?
+        \item É possível obter resultados equiparáveis com mais classes?
+        \item Influência de algoritmos em resultados com a base final.
+    \end{itemize}
+    
+\end{frame}
+
+\section{Cronograma}
+
+\begin{frame}{Conteúdo} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{I. Artigos}
+
+\begin{frame}{Base de Artigos Selecionados}
+
+    \begin{enumerate}[<+-| alert@+>]
+        \setlength{\itemsep}{10pt}
+        \item Detecting Malicious URLs Using Machine Learning Techniques: Review and Research Directions (IEEE \emph{Xplore\textregistered});
+        \item A Survey of Intelligent Detection Designs of HTML URL Phishing Attacks (IEEE \emph{Xplore\textregistered});
+        \item A Comparative Survey of Instance Selection Methods applied to NonNeural and Transformer-Based Text Classification (ACM Digital Library);
+        \item An Assessment of Lexical, Network, and Content-Based Features for Detecting Malicious URLs Using Machine Learning and Deep Learning Models (Hindawi). \nocite{*}
+    \end{enumerate}
+    
+\end{frame}
+
+\subsection{II Desenvolvimento}
+
+\begin{frame}{Etapas}
+    
+    \begin{itemize}[<+-| alert@+>]
+        \setlength{\itemsep}{10pt}
+        \item Parcial I - 25/05/2023:
+        \begin{enumerate}
+            \item Análise exploratória aprofundada da base;
+            \item Construção de novos atributos. 
+        \end{enumerate}
+
+        \item Parcial II - 13/06/2023:
+        \begin{enumerate}
+            \item Análise e seleção de atributos;
+            \item Balanceamento da base de dados.
+        \end{enumerate}
+
+        \item Final - 27/06/2023:
+        \begin{enumerate}
+            \item Construção dos modelos de \emph{machine learning};
+            \item Validação dos resultados e finalização da escrita do artigo.
+        \end{enumerate}
+    \end{itemize}
+    
+\end{frame}
+
+\section*{Final}
+
+\begin{frame}[allowframebreaks]{Referências}
+    \scriptsize\bibliographystyle{plainnat}
+    \bibliography{ref}
+    % \bibliographystyle{alpha}
+\end{frame}
+
+\end{document}
