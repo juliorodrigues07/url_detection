@@ -54,6 +54,15 @@ def count_dirs(url):
     return url_path.count('/')
 
 
+def count_punctuation(dataset):
+
+    aux = dataset.copy()
+    aux['url_alphas'] = aux['url'].apply(lambda i: count_alpha(i))
+
+    dataset['url_punc'] = dataset['url_length'] - dataset['digits_qtd'] - aux['url_alphas']
+    return dataset
+
+
 def first_directory(url):
 
     url_path = urlparse(url).path
@@ -76,3 +85,14 @@ def odd_words(url):
         return 1
     else:
         return 0
+
+
+def count_alpha(url):
+
+    alpha_numerics = 0
+
+    for c in url:
+        if c.isalpha():
+            alpha_numerics += 1
+
+    return alpha_numerics

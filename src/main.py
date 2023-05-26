@@ -5,6 +5,7 @@ from datamining.data_visualization import url_len_boxplot
 from datamining.data_visualization import feature_dist
 from datamining.data_visualization import pie_chart
 from datamining.preprocessing import discretize_values
+from datamining.preprocessing import count_punctuation
 from datamining.preprocessing import first_directory
 from datamining.preprocessing import url_protocol
 from datamining.preprocessing import count_digits
@@ -48,11 +49,12 @@ def grind_dataset(dataset):
     url_dataset['dirs_qtd'] = url_dataset['url'].apply(lambda x: count_dirs(x))
     url_dataset['fstdir_length'] = url_dataset['url'].apply(lambda x: first_directory(x))
     url_dataset['susp_words'] = url_dataset['url'].apply(lambda x: odd_words(x))
+    url_dataset = count_punctuation(url_dataset.copy())
 
     # Equal frequency binning by url lengths
-    categorical_size = ['Short', 'Normal', 'Long', 'Very Long']
-    url_dataset['url_length'] = qcut(url_dataset['url_length'].copy(), q=4, labels=categorical_size)
-    url_dataset = discretize_values(url_dataset.copy(), 'url_length')
+    # categorical_size = ['Short', 'Normal', 'Long', 'Very Long']
+    # url_dataset['url_length'] = qcut(url_dataset['url_length'].copy(), q=4, labels=categorical_size)
+    # url_dataset = discretize_values(url_dataset.copy(), 'url_length')
 
     # categorical_quantity = ['Few', 'Normal', 'Many', 'Too Many']
     # url_dataset['number-of-dirs'] = qcut(url_dataset['number-of-dirs'].copy(), q=4, labels=categorical_quantity)
@@ -63,7 +65,7 @@ def grind_dataset(dataset):
     # url_dataset = discretize_values(url_dataset.copy(), 'first-dir-length')
 
     # Saves the recently constructed dataset
-    url_dataset.to_csv(f'{getcwd()}/datasets/preprocessed.csv', index=False)
+    url_dataset.to_csv(f'{getcwd()}/datasets/preprocessed_v2.csv', index=False)
     return url_dataset
 
 
@@ -72,9 +74,9 @@ def main():
     # url_dataset = read_csv(f'{getcwd()}/datasets/URLs.csv')
     # polished_dataset = grind_dataset(url_dataset)
 
-    polished_dataset = read_csv(f'{getcwd()}/datasets/preprocessed.csv', nrows=32000)
+    polished_dataset = read_csv(f'{getcwd()}/datasets/preprocessed_v2.csv')
     class_names = ['Benign', 'Defacement', 'Phishing', 'Malware']
-    feature_names = ['url_length', 'protocol', 'digits_qtt', 'dirs_qtt', 'fstdir_len', 'susp_words']
+    feature_names = ['url_length', 'protocol', 'digits_qtt', 'dirs_qtt', 'fstdir_len', 'susp_words', 'url_punc']
 
     # Plots classes distribution
     # plot_distribution(polished_dataset)
