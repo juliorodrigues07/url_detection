@@ -10,6 +10,8 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [Python3](https://python.org) and [pip](https://pip.pypa.io/en/stable/installation/) package manager:
 
       sudo apt install python3 python3-pip build-essential python3-dev
+      
+## Data Mining
 
 - [scikit-learn](https://scikit-learn.org/stable/index.html) library:
 
@@ -38,12 +40,36 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [numpy](https://numpy.org/) library:
 
       pip install numpy
+      
+## Web Scraping
+      
+- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) library:
+ 
+      pip install beautifulsoup4
+      
+- [mechanize](https://mechanize.readthedocs.io/en/latest/) library:
+ 
+      pip install mechanize
+      
+- [Random User Agents](https://pypi.org/project/random-user-agent/) library:
+ 
+      pip install random_user_agent
+      
+- [PyCryptodome](https://pycryptodome.readthedocs.io/en/latest/src/introduction.html) library:
+ 
+      pip install pycryptodomex
        
-- To install all dependencies:
+## To install all dependencies
 
-      ./install_dependencies.sh
+    ./install_dependencies.sh
 
 # Execution
 
+## Data Mining
+
     python3 main.py
+    
+## Web Scraping
       
+    python3 phishing_scraper.py
+    
