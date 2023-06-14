@@ -23,8 +23,7 @@ def initialize_browser(url):
 def phish_scrapper():
 
     page_number = 0
-    # n_requests = ceil(const.N_URLS / const.PER_PAGE)
-    n_requests = 10
+    n_requests = ceil(const.N_URLS / const.PER_PAGE)
 
     with open(f'{getcwd()}/datasets/phishtank.csv', 'w') as file:
         file.write('url,type\n')
@@ -48,8 +47,8 @@ def phish_scrapper():
                     # Discards info about when it was added, getting only the url text
                     if i == 1:
                         raw_text = td.get_text().split('added on ')[0]
-                        # phishing_url = raw_text[0].replace('[email protected]', '')
-                        file.write(f'{raw_text},phishing\n')
+                        phishing_url = raw_text.replace('[email protected]', '')
+                        file.write(f'{phishing_url},phishing\n')
                         break
 
                     i += 1
@@ -62,7 +61,7 @@ def phish_scrapper():
             print(f'{round(progress, 2)}% concluded...')
 
             # Time interval randomly defined for spacing at each request and avoid IP blocks
-            timing = random.randint(2, 5)
+            timing = random.randint(5, 10)
             sleep(timing)
 
 
