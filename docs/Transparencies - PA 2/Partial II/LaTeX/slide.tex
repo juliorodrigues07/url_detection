@@ -1,0 +1,301 @@
+\documentclass{beamer}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage[CJKmath=true, AutoFakeBold = true]{xeCJK}
+% \usepackage[T1]{fontenc}
+\setCJKmainfont{AR PL KaitiM GB}
+\usepackage{latexsym,xcolor,multicol,booktabs,calligra}
+\usepackage{amssymb,amsfonts,amsmath,amsthm,mathrsfs,mathptmx}
+\usepackage{graphicx,pstricks,listings,stackengine}
+\usefonttheme[onlymath]{serif}
+\usepackage[brazil]{babel}
+
+\renewcommand{\today}{13 de Junho de 2023}
+\renewcommand{\alert}[1]{\textbf{\color{swufe}#1}}
+
+\author[Julio Rodrigues (UFSJ)]{Julio Cesar da Silva Rodrigues\inst{1}}
+\title[Mineração de Dados Aplicada - TP 2 - Parcial II]{Detecção de URLs Maliciosas}
+\subtitle{Mineração de Dados Aplicada}
+\institute[UFSJ]
+{
+    \inst{1} 
+    Universidade Federal de São João del-Rei \\
+    Curso de Ciência da Computação \\
+    \textit{julio.csr.271@aluno.ufsj.edu.br}\\
+}
+
+\usetheme{Warsaw}
+\setbeamertemplate{page number in head/foot}[totalframenumber]
+% \usepackage{SWUFE}
+
+\def\cmd#1{\texttt{\color[RGB]{0, 0, 139}\footnotesize $\backslash$#1}}
+\def\env#1{\texttt{\color[RGB]{0, 0, 139}\footnotesize #1}}
+
+\lstset{
+    language=[LaTeX]TeX,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries\color[RGB]{0, 0, 139},
+    stringstyle=\color[RGB]{50, 50, 50},
+    numbers=left,
+    numberstyle=\small\color{gray},
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    frame=shadowbox,
+}
+
+\begin{document}
+
+\begin{frame}[plain]
+    \titlepage
+    \vspace*{-1.8cm}
+    \begin{figure}[htpb]
+        \begin{center}
+            \includegraphics[width=0.35\linewidth]{pic/LogoUFSJ.PNG}
+        \end{center}
+    \end{figure}
+    \begin{center}
+        \footnotesize 13 de Junho de 2023
+    \end{center}
+\end{frame}
+
+\begin{frame}{Roteiro}
+    \tableofcontents[sectionstyle=show,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/shaded/hide]
+\end{frame}
+
+\section{Novo Atributo}
+
+\begin{frame}{Roteiro} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Status das Páginas}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item URLs maliciosas possuem curto tempo de vida;
+        \item Código HTTP retornado pode ajudar a destacar URLs deste tipo;
+        \item Impacto observado na classificação foi positivo;
+        \item Redução nos falsos negativos (\emph{malware} classificado como seguro).
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Holdout 80 | 20}
+
+    \begin{block}{}
+\begin{table}
+\centering
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+
+%\begin{tabularx}{\columnwidth}{|lcccc|}
+\hline 
+ 
+\multicolumn{4}{|c|}{XGBoost}\\ 
+\hline 
+\rowcolor{}
+
+Class & Precision & Recall & F1-Score\\
+ \hline 
+ %\rowcolor{Gray}
+%\multicolumn{5}{|c|}{Dictionary} \\ 
+% \hline 
+Benign & 0.93 & 0.98 & 0.95\\   %\hdashline
+Defacement & 0.94 & 0.97 & 0.95\\   %\hdashline
+Phishing & 0.96 & 0.89 & 0.93\\   %\hdashline
+Malware & 0.94 & 0.82 & 0.88\\   %\hdashline
+\hline
+\end{tabular}
+}
+%\end{tabularx}
+%\label{se:Dic}
+\end{table}
+\end{block}
+\note[item]{.}
+
+\end{frame}
+
+\section{Balanceamento}
+
+\begin{frame}{Roteiro} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{I. Benign}
+
+\begin{frame}{Classe \emph{benign}}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item Correspondem à quase 70\% do total da base;
+        \item Classes \emph{defacement} e \emph{phishing} em relação à \emph{benign} possuem:
+        \begin{enumerate}
+            \vspace{0.2cm}
+            \setlength{\itemsep}{10pt}      
+            \item Macros F1 próximas;
+            \item Cada uma apresenta menos que 25\% da quantidade de instâncias.
+        \end{enumerate} 
+        \item \emph{Undersampling} aleatório;
+        \item Remover grande parte destas instâncias, deixando alguma margem;
+        \item Evitar perca de informação.
+    \end{itemize}
+
+\end{frame}
+
+\subsection{II. Phishing}
+
+\begin{frame}{Classe \emph{phishing}}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item \emph{PhishTank}\footnotemark para suprir o déficit de instâncias de \emph{phishing};
+        \item \emph{Scraper} básico coletando URLs;
+        \item Vantagem em relação à \emph{oversampling} aleatório.
+    \end{itemize}
+
+    \footnotetext[1]{\tiny Disponível em: \url{https://phishtank.org/phish_archive.php}}
+    
+\end{frame}
+
+\subsection{III. Defacement e Malware}
+
+\begin{frame}{Classes \emph{defacement} e \emph{malware}}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item Dificuldade em encontrar bases de dados com a quantidade de instâncias necessária;
+        \item Utilização de \emph{SMOTE} \cite{DBLP:journals/corr/abs-1106-1813} em vez de \emph{oversampling} aleatório;
+        \item Gerar novas instâncias com base em dados existentes;
+    \end{itemize}
+
+\end{frame}
+
+\subsection{IV. Base Final}
+
+\begin{frame}{Base de Dados Final}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item 800 mil instâncias, totalmente balanceada;
+        \item 8 atributos e 1 classe (4 valores distintos);
+        \item Composta por URLs de bases de dados do \emph{Kaggle}\footnotemark e \emph{PhishTank}.
+    \end{itemize}
+
+    \footnotetext[2]{\tiny Disponível em: \url{https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset}}
+    
+\end{frame}
+
+\section{Resultados}
+
+\begin{frame}{Roteiro} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Comparativo de Parciais}
+
+    \begin{block}{}
+\begin{table}
+\centering
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|}
+
+%\begin{tabularx}{\columnwidth}{|lcccc|}
+\hline 
+ 
+\multicolumn{3}{|c|}{TP 2 - Parcial I}\\ 
+\hline 
+
+ Algoritmo & Média  & Desvio Padrão\\
+ \hline 
+ %\rowcolor{Gray}
+%\multicolumn{5}{|c|}{Dictionary} \\ 
+% \hline 
+Regressão Logística & 0,5780295368328738 & 0,0021293237223429956\\   %\hdashline
+XGBoost & 0,8568910936179079 & 0,0017065729226258411\\  %\hdashline  
+  \hline 
+
+
+\end{tabular}
+}
+%\end{tabularx}
+%\label{se:Dic}
+\end{table}
+\end{block}
+\note[item]{.}
+
+
+\begin{block}{}
+\begin{table}
+\centering
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|}
+
+%\begin{tabularx}{\columnwidth}{|lcccc|}
+\hline 
+ 
+\multicolumn{3}{|c|}{TP 2 - Parcial II}\\ 
+\hline 
+
+ Algoritmo & Média  & Desvio Padrão\\
+ \hline 
+ %\rowcolor{Gray}
+%\multicolumn{5}{|c|}{Dictionary} \\ 
+% \hline 
+Regressão Logística & 0,67668635532121 & 0,0015789916679593162\\   %\hdashline
+XGBoost & 0,9324923443237593 & 0,0008784997591179979\\  %\hdashline 
+  \hline 
+
+
+\end{tabular}
+}
+%\end{tabularx}
+%\label{se:Dic}
+\end{table}
+\end{block}
+\note[item]{.}
+    
+\end{frame}
+
+\begin{frame}{Teste t de dupla cauda}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item Valores:
+        \begin{enumerate}
+            \setlength{\itemsep}{10pt}
+            \item \(\alpha = 0,05\);
+            \item \(t = 177,42420397526064\);
+            \item \(p = 1,0791746370249748 \times 10^{-10}\).
+        \end{enumerate}
+        \item Hipótese nula rejeitada;
+        \item Modelos estatisticamente distintos;
+        \item XGBoost com nítida superioridade.
+    \end{itemize}
+    
+\end{frame}
+
+\section{Conclusão}
+
+\begin{frame}{Roteiro} 
+     \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Faltou...}
+
+    \begin{itemize}
+        \setlength{\itemsep}{10pt}
+        \item Selecionar novos algoritmos para teste;
+        \item Comparação com trabalhos relacionados;
+        \item Busca por novos atributos?.
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Referências}
+    \scriptsize\bibliographystyle{apalike}
+    \bibliography{ref}
+\end{frame}
+
+\end{document}
