@@ -4,7 +4,7 @@ from random_user_agent.params import SoftwareName
 
 
 # Total number of URLs to scrap
-N_URLS = 333990.0
+N_URLS = 105886.0
 
 # Each page shows a list with 20 URLs
 PER_PAGE = 20.0
@@ -20,4 +20,4 @@ SOFTWARE_NAMES = [SoftwareName.CHROME.value, SoftwareName.FIREFOX.value,
                   SoftwareName.EDGE.value, SoftwareName.OPERA.value, SoftwareName.SAFARI.value]
 OPERATING_SYSTEMS = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value, OperatingSystem.ANDROID.value,
                      OperatingSystem.IOS.value, OperatingSystem.MACOS.value]
-USER_AGENT_ROTATOR = UserAgent(software_names=SOFTWARE_NAMES, operating_systems=OPERATING_SYSTEMS, limit=500)
+USER_AGENT_ROTATOR = UserAgent(software_names=SOFTWARE_NAMES, operating_systems=OPERATING_SYSTEMS, limit=1000)
