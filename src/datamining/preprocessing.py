@@ -2,7 +2,6 @@ from imblearn.under_sampling import RandomUnderSampler
 from sklearn.preprocessing import LabelEncoder
 from imblearn.over_sampling import SMOTE
 from urllib.parse import urlparse
-import grequests
 import re
 
 
@@ -99,34 +98,6 @@ def count_alpha(url):
             alpha_numerics += 1
 
     return
-
-
-def url_status(dataset):
-
-    dataset['online?'] = 'default'
-    urls = list(dataset['url'])
-    size = len(urls)
-    batch_size = 50000
-
-    # CAREFUL WITH THIS: POTENTIAL SECURITY AND MEMORY PROBLEMS #
-    i = 0
-    while i < size:
-
-        # Send requests for a batch of URLs in parallel
-        if i + batch_size >= size:
-            requests = (grequests.get(url, timeout=15) for url in urls[i:])
-        else:
-            requests = (grequests.get(url, timeout=15) for url in urls[i: i + batch_size])
-
-        # Obtains the HTTP status codes from the responses
-        responses = grequests.map(requests)
-        status = [str(code) for code in responses]
-
-        # Fills the dataset gradually as the requests are done
-        dataset['online?'][i: i + batch_size] = status
-        i += batch_size
-
-    return dataset
 
 
 def majority_undersampling(attributes, classes):

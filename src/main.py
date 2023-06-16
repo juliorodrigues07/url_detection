@@ -14,7 +14,6 @@ from datamining.preprocessing import url_protocol
 from datamining.preprocessing import count_digits
 from datamining.preprocessing import count_dirs
 from datamining.preprocessing import url_length
-from datamining.preprocessing import url_status
 from datamining.preprocessing import odd_words
 from datamining.ml_methods import logistic_regression
 from datamining.ml_methods import xgb_classification
@@ -67,10 +66,7 @@ def grind_dataset(dataset):
 
     # TODO: Merge classes? {defacement, phishing, malware} ==> malicious
 
-    # url_dataset = url_status(dataset) --> CAREFUL WITH THIS: POTENTIAL SECURITY AND MEMORY PROBLEMS
-
-    url_dataset = discretize_values(dataset.copy(), 'online?')
-    url_dataset = url_length(url_dataset.copy())
+    url_dataset = url_length(dataset)
     url_dataset['protocol'] = url_dataset['url'].apply(lambda x: url_protocol(x))
     url_dataset['digits_qtd'] = url_dataset['url'].apply(lambda x: count_digits(x))
     url_dataset['dirs_qtd'] = url_dataset['url'].apply(lambda x: count_dirs(x))
@@ -91,7 +87,7 @@ def main():
 
     polished_dataset = read_csv(f'{getcwd()}/datasets/balanced.csv')
     class_names = ['Benign', 'Defacement', 'Phishing', 'Malware']
-    feature_names = ['online?', 'url_length', 'protocol', 'digits_qtt', 'dirs_qtt', 'fstdir_len', 'susp_words', 'url_punc']
+    feature_names = ['url_length', 'protocol', 'digits_qtt', 'dirs_qtt', 'fstdir_len', 'susp_words', 'url_punc']
 
     # Plots classes distribution
     # plot_distribution(polished_dataset)
