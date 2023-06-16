@@ -20,6 +20,14 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [xgboost](https://xgboost.readthedocs.io/en/stable/) library:
  
       pip install xgboost
+
+- [mlxtend](https://rasbt.github.io/mlxtend/) library:
+ 
+      pip install mlxtend
+
+- [imbalanced-learn](https://imbalanced-learn.org/stable/) library:
+ 
+      pip install imbalanced-learn
        
 - [pandas](https://pandas.pydata.org/) library:
 
@@ -54,6 +62,10 @@ Malicious URL Detector built utilizing several data mining, machine learning and
 - [Random User Agents](https://pypi.org/project/random-user-agent/) library:
  
       pip install random_user_agent
+
+- [GRequests](https://github.com/spyoungtech/grequests) library:
+ 
+      pip install grequests
       
 - [PyCryptodome](https://pycryptodome.readthedocs.io/en/latest/src/introduction.html) library:
  
