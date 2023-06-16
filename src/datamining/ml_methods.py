@@ -8,6 +8,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
+from mlxtend.evaluate import paired_ttest_5x2cv
 from xgboost import XGBClassifier
 from joblib import dump
 from os import getcwd
@@ -69,11 +70,11 @@ def xgb_classification(training_attributes, test_attributes, training_classes, t
     # TODO: Ensemble method: essential to aplly hiperparameters fine tuning with tripartite
     xgb_clf = XGBClassifier(base_score=0.5,
                             booster='gbtree',
-                            n_estimators=500,
+                            n_estimators=100,
                             n_jobs=-1,
                             objective='reg:squarederror',
                             max_depth=5,
-                            learning_rate=0.5)
+                            learning_rate=0.1)
     
     xgb_clf.fit(training_attributes, training_classes)
     predictions = xgb_clf.predict(test_attributes)
@@ -102,9 +103,21 @@ def summary(class_names, test_classes, predictions):
     ConfusionMatrixDisplay.from_predictions(test_classes, predictions,
                                             display_labels=class_names, cmap='Blues', xticks_rotation='vertical')
 
-    plt.title('Matriz de Confusão (XGBoost)')
-    plt.xlabel('Predições')
-    plt.ylabel('Classe Real')
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predictions')
+    plt.ylabel('Real Class')
     plt.show()
 
-# TODO: Save trained models after tuning
+
+def paired_ttest(classifier1, classifier2, attributes, classes):
+
+    alpha = 0.05
+    _, p = paired_ttest_5x2cv(classifier1, classifier2, attributes, classes)
+
+    print(f'alpha:       {alpha}')
+    print(f'p value:     {p}')
+
+    if p > alpha:
+        print('Models are statistically equal (Fail to reject null hypothesis)')
+    else:
+        print('Models statistically different (Reject null hypothesis)')
