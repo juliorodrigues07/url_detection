@@ -97,13 +97,13 @@ def count_alpha(url):
         if c.isalpha():
             alpha_numerics += 1
 
-    return
+    return alpha_numerics
 
 
 def majority_undersampling(attributes, classes):
 
     # Benign instances (encoded as 0) randomly removed to achieve approximately 200k
-    undersampler = RandomUnderSampler(sampling_strategy={0: 200211})
+    undersampler = RandomUnderSampler(sampling_strategy={0: 200000})
     x_after, y_after = undersampler.fit_resample(attributes, classes)
 
     return x_after, y_after
