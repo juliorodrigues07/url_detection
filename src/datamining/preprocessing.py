@@ -115,3 +115,59 @@ def minority_oversampling(attributes, classes):
     x_after, y_after = oversampler.fit_resample(attributes, classes)
     
     return x_after, y_after
+
+
+def count_dots(url):
+    return url.count('.')
+
+
+def count_hifen(url):
+    return url.count('-')
+
+
+def count_underscore(url):
+    return url.count('_')
+
+
+def count_slash(url):
+    return url.count('/')
+
+
+def count_question(url):
+    return url.count('?')
+
+
+def count_equals(url):
+    return url.count('=')
+
+
+def count_ats(url):
+    return url.count('@')
+
+
+def count_commercial(url):
+    return url.count('&')
+
+
+def count_excla(url):
+    return url.count('!')
+
+
+def count_plus(url):
+    return url.count('+')
+
+
+def count_star(url):
+    return url.count('*')
+
+
+def count_hashtag(url):
+    return url.count('#')
+
+
+def count_cipher(url):
+    return url.count('$')
+
+
+def count_percent(url):
+    return url.count('%')
