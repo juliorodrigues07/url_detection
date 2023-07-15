@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from mlxtend.evaluate import paired_ttest_5x2cv
@@ -55,26 +56,25 @@ def svm_model(training_attributes, test_attributes, training_classes, test_class
 
 def logistic_regression(training_attributes, test_attributes, training_classes, test_classes, class_names):
 
-    classifier = LogisticRegression(n_jobs=-1)
-    classifier.fit(training_attributes, training_classes)
+    lr_clf = LogisticRegression(n_jobs=-1)
+    lr_clf.fit(training_attributes, training_classes)
 
-    predictions = classifier.predict(test_attributes)
+    predictions = lr_clf.predict(test_attributes)
     summary(class_names, test_classes, predictions)
+    # dump(xgb_clf, f'{getcwd()}/models/inital_lr_model.sav')
 
-    perm_importance = permutation_importance(classifier, test_attributes, test_classes)
+    perm_importance = permutation_importance(lr_clf, test_attributes, test_classes)
     return perm_importance
 
 
 def xgb_classification(training_attributes, test_attributes, training_classes, test_classes, class_names):
 
-    # TODO: Ensemble method: essential to aplly hiperparameters fine tuning with tripartite
-    xgb_clf = XGBClassifier(base_score=0.5,
-                            booster='gbtree',
-                            n_estimators=100,
+    xgb_clf = XGBClassifier(booster='gbtree',
+                            n_estimators=200,
                             n_jobs=-1,
                             objective='reg:squarederror',
-                            max_depth=5,
-                            learning_rate=0.1)
+                            max_depth=9,
+                            learning_rate=0.3)
     
     xgb_clf.fit(training_attributes, training_classes)
     predictions = xgb_clf.predict(test_attributes)
@@ -83,6 +83,20 @@ def xgb_classification(training_attributes, test_attributes, training_classes, t
     # dump(xgb_clf, f'{getcwd()}/models/inital_xgb_model.sav')
 
     return xgb_clf.feature_importances_
+
+
+def knn_classifier(training_attributes, test_attributes, training_classes, test_classes, class_names):
+
+    knn_clf = KNeighborsClassifier(algorithm='ball_tree', n_neighbors=7, weights='distance', n_jobs=-1)
+
+    knn_clf.fit(training_attributes, training_classes)
+    predictions = knn_clf.predict(test_attributes)
+
+    summary(class_names, test_classes, predictions)
+    # dump(knn_clf, f'{getcwd()}/models/inital_knn_model.sav')
+
+    perm_importance = permutation_importance(knn_clf, test_attributes, test_classes)
+    return perm_importance
 
 
 def cv_learning(attributes, classes, classifier):
