@@ -63,7 +63,7 @@ def plot_feature_importance(cols, feature_dataframe):
     feature_data = feature_data.sort_values(by='Feature Relevance', ascending=False)
 
     plt.figure(figsize=(10, 12))
-    plt.title('Average Feature Importance (XGBoost)', fontsize=14)
+    plt.title('Average Feature Importance', fontsize=14)
 
     s = sns.barplot(y='Feature', x='Feature Relevance', data=feature_data, orient='h', palette='coolwarm')
     s.set_xticklabels(s.get_xticklabels(), rotation=90)
@@ -81,4 +81,24 @@ def calculate_importances(perm_importances, features_names):
     plt.ylabel('Feature')
     plt.xlabel("Feature Relevance")
 
+    plt.show()
+
+
+def plot_correlation_matrix(df, graph_width):
+
+    df = df.dropna('columns')
+    df = df[[col for col in df if df[col].nunique() > 1]]
+
+    if df.shape[1] < 2:
+        return
+
+    corr = df.corr()
+    plt.figure(num=None, figsize=(graph_width, graph_width), dpi=80, facecolor='w', edgecolor='k')
+    corr_mat = plt.matshow(corr, fignum=1)
+
+    plt.xticks(range(len(corr.columns)), corr.columns, rotation=90)
+    plt.yticks(range(len(corr.columns)), corr.columns)
+    plt.gca().xaxis.tick_bottom()
+    plt.colorbar(corr_mat)
+    plt.title(f'Correlation Matrix', fontsize=15)
     plt.show()
