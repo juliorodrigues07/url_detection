@@ -11,7 +11,7 @@
 \acmYear{2023}
 \acmDOI{XXXXXXX.XXXXXXX}
 
-\acmConference[UFSJ '23]{Universidade Federal de São João del-Rei}{Junho 30--06, 2023}{São João del-Rei, MG}
+\acmConference[UFSJ '23]{Universidade Federal de São João del-Rei}{Junho 29--06, 2023}{São João del-Rei, MG}
 
 \settopmatter{printacmref=false}
 
@@ -37,7 +37,7 @@ Neste trabalho, apresentamos um método eficaz de detecção de URLs maliciosas 
 
 \keywords{feature construction, características léxicas, detecção de URLs, balanceamento de classes}
 
-\received[Recebido]{30 Junho 2023}
+\received[Recebido]{29 de Junho de 2023}
 % \received[Revisado]{3 Agosto 2023}
 % \received[Aceito]{10 Agosto 2023}
 
@@ -55,15 +55,15 @@ Atualmente, existem duas estratégias populares eficazes utilizadas na detecçã
 
 A segunda abordagem consiste na construção de modelos de aprendizado de máquina para classificação de URLs. A utilização destes tipos de métodos geralmente apresenta maior complexidade geral em relação aos serviços de \emph{blacklist}. No entanto, em caso de sucesso com um modelo bem construído, este pode apresentar eficácia a curto, médio e longo prazo, capaz de classificar grande parte das URLs com precisão.
 
-A organização deste artigo apresenta-se na seguinte forma: a Seção \ref{sec:2} apresenta alguns dos trabalhos relacionados; na Seção \ref{sec:3} é descrita a metodologia de desenvolvimento empregada; a Seção \ref{sec:4} apresenta uma análise sobre os resultados obtidos; a Seção \ref{sec:5} discute as principais conclusões deste trabalho e apresenta uma série de questões a serem consideradas em possíveis trabalhos futuros. 
+O restante deste artigo está organizado da seguinte maneira: a Seção \ref{sec:2} apresenta alguns dos trabalhos relacionados; na Seção \ref{sec:3} é descrita a metodologia de desenvolvimento empregada; a Seção \ref{sec:4} apresenta uma análise sobre os resultados obtidos; a Seção \ref{sec:5} discute as principais conclusões deste trabalho e apresenta uma série de questões a serem consideradas em possíveis trabalhos futuros.
 
 \section{Trabalhos Relacionados} \label{sec:2}
 
 Ayres et al. \cite{sbrc} propõem um modelo de classificação binária de URLs de \emph{phishing} direcionadas a brasileiros. Os autores extraíram um conjunto de 117 características das URLs, incluindo as de escopo léxico e de rede. Destas 117 características, as três que possuem maior poder preditivo estão relacionadas à rede, exigindo o acesso às URLs para que tais informações sejam coletadas. Os resultados apresentados revelam bom desempenho de classificadores clássicos, com \emph{F1 Score} média de 95,85\% entre KNN, SVM e J48 (Árvore de Decisão).
 
-Saleem Raja et al. \cite{SALEEMRAJA2021163} propõem um estudo baseado somente na construção de atributos léxicos para formular um classificador de URLs multiclasse. Ao todo, foram extraídos 27 características da base de dados, embora somente as 20 com maior poder preditivo foram utilizadas no modelo final. Tal modelo alcançou \emph{F1 Score} de 99\% com o algoritmo \emph{ensemble} random forest, embora não tenham utilizado quaisquer técnicas de validação cruzada.
+Saleem Raja et al. \cite{SALEEMRAJA2021163} propõem um estudo baseado somente na construção de atributos léxicos para formular um classificador de URLs multiclasse. Ao todo, foram extraídos 27 características da base de dados, embora somente as 20 com maior poder preditivo tenham sido utilizadas no modelo final. Tal modelo alcançou \emph{F1 Score} de 99\% com o algoritmo \emph{ensemble} random forest, embora não tenham utilizado quaisquer técnicas de validação cruzada.
 
-Vazhayil et al. \cite{8494159} executam um comparativo entre métodos de aprendizado profundo e aprendizado de máquina para classificação binária de URLs de \emph{phishing}. Os resultados apresentados revelam que a combinação de redes neurais (CNN e LSTM) são capazes de prover um modelo com \emph{F1 Score} de até 98\%.
+Vazhayil et al. \cite{8494159} executam um comparativo entre métodos de aprendizado profundo e aprendizado de máquina para classificação binária de URLs de \emph{phishing}. Os resultados apresentados revelam que a combinação de redes neurais (CNN e LSTM) é capaz de prover um modelo com \emph{F1 Score} de até 98\%.
 
 Aljabri et al. \cite{10.1155/2022/3241216} também seguem uma abordagem semelhante, utilizando modelos de aprendizado de máquina e aprendizado profundo para classificação binária de URLs. No entanto, é extraído um conjunto de características baseadas não apenas no escopo léxico da URL, mas também de aspectos relacionados à rede e conteúdo. O modelo construído alcançou \emph{F1 Score} de 96\% com um dos classificadores mais simples do aprendizado de máquina supervisionado: o Naive Bayes.
 
@@ -78,7 +78,7 @@ Nesta seção, apresentamos em detalhes o processo de desenvolvimento e decisõe
 
 \subsection{Extração de Características}
 
-No processo de extração de informações das URLs com alto poder preditivo, decidimos utilizar uma abordagem puramente léxica. Portanto, tal processo ocorre somente no escopo da estrutura da URL. O principal motivo por detrás desta abordagem, é de que a extração da maioria das características relacionadas a conteúdo ou rede de URLs abordada em vários trabalhos relacionados, exige o acesso às mesmas para coleta. Idealmente, não deveria haver necessidade de acessá-las. Pelo contrário, desejamos saber a natureza de uma URL sem riscos de vulnerabilidade aos ataques cibernéticos.
+No processo de extração de informações das URLs com alto poder preditivo, decidimos utilizar uma abordagem puramente léxica. Portanto, tal processo ocorre somente no escopo da estrutura da URL. O principal motivo por trás desta abordagem é que a extração da maioria das características relacionadas a conteúdo ou rede de URLs, abordada em vários trabalhos relacionados, exige o acesso às mesmas para coleta. Idealmente, não deveria haver necessidade de acessá-las. Pelo contrário, desejamos saber a natureza de uma URL sem riscos de exposição a possíveis ataques cibernéticos.
 
 Neste trabalho, extraímos 7 características por meio de simples análises estatísticas das bases de dados, enquanto outras 14 características foram extraídas com base na análise de trabalhos relacionados. Novamente, todas estas 21 características foram extraídas considerando somente o escopo léxico das URLs.
 
@@ -88,6 +88,8 @@ Além da contagem de símbolos, também foram extraídas características relaci
 
 \subsection{Seleção de Características}
 
+Concluído o processo de extração de características, iniciou-se a etapa de análise da relevância de cada uma destas. Para realizar este tipo de análise, utilizamos uma estratégia de eliminação recursiva de características com validação cruzada. Em outras palavras, utilizamos uma estratégia \emph{bottom-up}, dividindo a base em cinco partes a cada eliminação de característica com menor relevância na classificação, obtendo 11 características de maior poder preditivo ao final do processamento.
+
 \vspace*{-1cm}
 \begin{figure}[ht]
     \centering
@@ -96,8 +98,6 @@ Além da contagem de símbolos, também foram extraídas características relaci
     \caption{Poder preditivo das 11 características}
     \label{fig:exampleFig1}
 \end{figure}
-
-Concluído o processo de extração de características, iniciou-se a etapa de análise da relevância de cada uma destas. Para realizar este tipo de análise, utilizamos uma estratégia de eliminação recursiva de características com validação cruzada. Em outras palavras, utilizamos uma estratégia \emph{bottom-up}, dividindo a base em cinco partes a cada eliminação de característica com menor relevância na classificação, obtendo 11 características de maior poder preditivo ao final do processamento.
 
 Este processo é executado até que se encontre uma quantidade ótima de características, ou seja, o total de características eliminadas provocam pouco, ou nenhum impacto no desempenho do modelo. Na Figura \ref{fig:exampleFig1}, podemos observar o resultado da seleção de características utilizando o algoritmo XGBoost \cite{10.1145/2939672.2939785} como base. É evidente a discrepância do poder preditivo do protocolo de comunicação utilizado pelas URLs com o restante dos atributos. Este comportamento deve-se a padrões muito bem definidos encontrados na base de dados, com a totalidade URLs de \emph{defacement} utilizando o protocolo HTTP, e URLs de \emph{phishing} e \emph{malware} concentrando-se no protocolo HTTPS.
 
@@ -116,15 +116,15 @@ Para a construção do modelo de aprendizado de máquina supervisionado, utiliza
 
 Após a aplicação do processo de união e remoção de instâncias duplicadas das bases de dados, tornou-se evidente o desbalanceamento de classes (Figura \ref{fig:exampleFig2}). Tal aspecto tornou necessária a adoção de técnicas de balanceamento precedendo a etapa de treinamento dos classificadores.
 
-Neste ponto, optamos por uma abordagem híbrida em relação à aplicação das técnicas de balanceamento na base de dados. O caminho mais simples seria à aplicação indiscriminada de \emph{oversampling} aleatório, duplicando instâncias das classes minoritárias, sem necessariamente agregar informação útil para os processos de treinamento e classificação. Além disso, o volume de dados duplicaria, elevando significativamente o custo computacional para treinamento dos modelos.
+Neste ponto, optamos por uma abordagem híbrida em relação à aplicação das técnicas de balanceamento na base de dados. O caminho mais simples seria a aplicação indiscriminada de \emph{oversampling} aleatório, duplicando instâncias das classes minoritárias, sem necessariamente agregar informação útil para os processos de treinamento e classificação. Além disso, o volume de dados duplicaria, elevando significativamente o custo computacional para treinamento dos modelos.
 
 Todavia, após testes iniciais com método \emph{hold-out}, verificou-se que os valores da métrica \emph{F1 Score} apresentaram-se próximos para URLs de classes \emph{benign}, \emph{phishing} e \emph{defacement}. Este resultado preliminar indicou uma potencial aplicação de \emph{undersampling} aleatório em instâncias da classe majoritária (\emph{benign}). Esta técnica foi de fato executada posteriormente, reduzindo o número de URLs seguras na base de dados de 428.081 para 200.000 instâncias. Com isto, concedeu-se margem para evitar perda de informação no caso de remoção de grandes quantidades de URLs não redundantes.
 
-Nesta etapa, equiparamos o número de instâncias de URLs seguras e de \emph{phishing}, por meio de \emph{undersampling} aleatório e raspagem de dados na base da PhishTank, respectivamente. Restou-se então, o nivelamento das URLs de \emph{defacement} e \emph{malware}. Embora houvesse a tentativa de raspagem de dados como no caso das URLs de \emph{phishing}, não encontramos bases de dados suficientemente grandes para suprir o déficit de tais instâncias.
+Nesta etapa, equiparamos o número de instâncias de URLs seguras e de \emph{phishing}, por meio de \emph{undersampling} aleatório e raspagem de dados na base da PhishTank, respectivamente. Restou então o nivelamento das URLs de \emph{defacement} e \emph{malware}. Embora houvesse a tentativa de raspagem de dados como no caso das URLs de \emph{phishing}, não encontramos bases de dados suficientemente grandes para suprir o déficit de tais instâncias.
 
 No entanto, decidimos por aplicar uma técnica de balanceamento baseada em sobreamostragem minoritária sintética: SMOTE \cite{DBLP:journals/corr/abs-1106-1813}. Em outras palavras, foram criadas diversas instâncias sintéticas das classes \emph{defacement} e \emph{malware} com base em URLs existentes dos tipos na base de dados.
 
-Por fim, obtemos uma base de dados totalmente balanceada, com 800 mil URLs (200 mil instâncias de cada classe) e 11 características. Desta etapa em diante, podemos prosseguir com a escolha dos algoritmos de aprendizado de máquina, formulação e avaliação dos modelos.
+Por fim, obtivemos uma base de dados totalmente balanceada, com 800 mil URLs (200 mil instâncias de cada classe) e 11 características. Desta etapa em diante, pudemos prosseguir com a escolha dos algoritmos de aprendizado de máquina, formulação e avaliação dos modelos.
 
 \begin{figure}[H]
     \centering
@@ -135,7 +135,7 @@ Por fim, obtemos uma base de dados totalmente balanceada, com 800 mil URLs (200 
 
 \subsection{Seleção de Classificadores}
 
-Para construção dos modelos de aprendizado de máquina supervisionado, selecionamos um conjunto com três classificadores. O primeiro deles é o XGBoost, caracterizado como um método \emph{ensemble}, este utiliza um conjunto de vários classificadores com a técnica de \emph{boosting}, calibrando e reforçando os classificadores a cada iteração. Os dois algoritmos restantes correspondem a métodos considerados clássicos da literatura, a regressão logística e o KNN \cite{fix1951discriminatory}.
+Para construção dos modelos de aprendizado de máquina supervisionado, selecionamos um conjunto com três classificadores. O primeiro deles é o XGBoost, caracterizado como um método \emph{ensemble}, que utiliza um conjunto de vários classificadores com a técnica de \emph{boosting}, calibrando e reforçando os classificadores a cada iteração. Os dois algoritmos restantes correspondem a métodos considerados clássicos da literatura, a regressão logística e o KNN \cite{fix1951discriminatory}.
 
 O principal motivo por trás da escolha de tais algoritmos, é a oportunidade de observar e comparar o desempenho de um classificador mais recente e sofisticado (XGBoost) com algoritmos mais antigos e clássicos (e.g, KNN). Neste ponto, podemos levantar algumas questões como por exemplo, a relação de desempenho do classificador com o custo computacional associado para treinamento. Outra hipótese a ser levantada é a influência do processo KDD no desempenho final dos classificadores, ou seja, se existe diferença real entre os classificadores com uma base de dados bem polida.
 
@@ -190,8 +190,9 @@ Por fim, seria interessante considerar a redução do volume da base de dados. P
 
 \begin{figure}[H]
     \centering
-    \vspace*{-1.15cm}
+    \vspace*{-0.4cm}
     \includegraphics[width=1.1\textwidth]{pic/corr.pdf}
+    \vspace*{-1.15cm}
     \caption{Níveis de correlação entre características}
     \label{fig:exampleFig4}
 \end{figure}
