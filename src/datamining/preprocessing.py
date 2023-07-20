@@ -1,7 +1,14 @@
+from datamining.data_visualization import plot_selected_features
+from datamining.ml_methods import holdout_split
+
 from imblearn.under_sampling import RandomUnderSampler
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_selection import RFECV
 from imblearn.over_sampling import SMOTE
+from xgboost import XGBClassifier
 from urllib.parse import urlparse
+from os import getcwd
 import re
 
 
@@ -100,23 +107,6 @@ def count_alpha(url):
     return alpha_numerics
 
 
-def majority_undersampling(attributes, classes):
-
-    # Benign instances (encoded as 0) randomly removed to achieve approximately 200k
-    undersampler = RandomUnderSampler(sampling_strategy={0: 200000})
-    x_after, y_after = undersampler.fit_resample(attributes, classes)
-
-    return x_after, y_after
-
-
-def minority_oversampling(attributes, classes):
-
-    oversampler = SMOTE()
-    x_after, y_after = oversampler.fit_resample(attributes, classes)
-    
-    return x_after, y_after
-
-
 def count_dots(url):
     return url.count('.')
 
@@ -171,3 +161,57 @@ def count_cipher(url):
 
 def count_percent(url):
     return url.count('%')
+
+
+def normalization(attributes):
+
+    attr_scaler = StandardScaler()
+    return attr_scaler.fit_transform(attributes)
+
+
+def majority_undersampling(attributes, classes):
+
+    # Benign instances (encoded as 0) randomly removed to achieve approximately 200k
+    undersampler = RandomUnderSampler(sampling_strategy={0: 200000})
+    x_after, y_after = undersampler.fit_resample(attributes, classes)
+
+    return x_after, y_after
+
+
+def minority_oversampling(attributes, classes):
+
+    oversampler = SMOTE(sampling_strategy='not majority', n_jobs=-1)
+    x_after, y_after = oversampler.fit_resample(attributes, classes)
+
+    return x_after, y_after
+
+
+def feature_selection(attributes, classes):
+
+    # Recursive feature selection with XGBoost and CV
+    cv_estimator = XGBClassifier(n_jobs=-1)
+    x_train, _, y_train, _ = holdout_split(attributes, classes)
+    cv_estimator.fit(x_train, y_train)
+
+    cv_selector = RFECV(cv_estimator, cv=5, step=1, scoring='f1_macro', verbose=1, n_jobs=-1)
+    cv_selector = cv_selector.fit(x_train, y_train)
+    rfecv_mask = cv_selector.get_support()
+
+    rfecv_features = list()
+    for check, feature in zip(rfecv_mask, x_train.columns):
+        if check:
+            rfecv_features.append(feature)
+
+    print(f'Optimal number of features: {cv_selector.n_features_}')
+    print(f'Best features: {rfecv_features}')
+
+    with open(f'{getcwd()}/datasets/best_features.txt', 'w') as file:
+        file.write(f'Optimal number of features: {cv_selector.n_features_}\n')
+        file.write(f'Best features: {rfecv_features}')
+
+    attributes.drop(rfecv_features, axis='columns')
+    attributes['type'] = classes
+    attributes.to_csv(f'{getcwd()}/datasets/feature_selected.csv', index=False)
+
+    n_features = x_train.shape[1]
+    plot_selected_features(n_features, cv_estimator.feature_importances_, x_train.columns.values)
