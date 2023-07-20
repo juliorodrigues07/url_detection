@@ -1,13 +1,22 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas import DataFrame
+from numpy import arange
 from numpy import array
+from os import getcwd
+
+
+def dataset_stats(dataset):
+
+    # Statistical data (min, max, mean, std, quartiles...) and features mean values by associated class
+    print(dataset.isna().sum())
+    print(dataset.describe().transpose())
+
+    # {0, 1, 2, 3} ==> {benign, defacement, phishing, malware}
+    print(dataset.groupby('type').mean().loc[3])
 
 
 def plot_distribution(dataset):
-
-    # Statistical summary (mean, minimum, maximum, standard deviation, quartiles, ...)
-    # print(dataset.describe().transpose())
 
     split = dataset.type.value_counts()
 
@@ -23,7 +32,7 @@ def plot_distribution(dataset):
     ax.grid(which='major', alpha=0.8)
     plt.show()
 
-    # fig.savefig()
+    fig.savefig(f'{getcwd()}/plots/class_dist(bar).svg', format='svg')
 
 
 def pie_chart(dataset, names):
@@ -35,6 +44,8 @@ def pie_chart(dataset, names):
     plt.title('Class Distribution')
     plt.legend(names, loc="best")
     plt.axis('equal')
+
+    plt.savefig(f'{getcwd()}/plots/class_dist(pie).svg', format='svg')
     plt.show()
 
 
@@ -43,6 +54,8 @@ def feature_dist(dataset, key):
     # plt.title('Protocol')
     sns.countplot(x=key, data=dataset, palette='Blues')
     plt.ylabel('Instances')
+
+    plt.savefig(f'{getcwd()}/plots/features/feat_dist({key}).svg', format='svg')
     plt.show()
 
 
@@ -56,31 +69,38 @@ def url_len_boxplot(dataset):
     axes.set_xlabel('Type')
     plt.show()
 
+    fig.savefig(f'{getcwd()}/plots/url_len(boxplot).svg', format='svg')
 
-def plot_feature_importance(cols, feature_dataframe):
+
+def plot_feature_importance(cols, attributes, f_importances):
+
+    feature_dataframe = DataFrame({'Feature': attributes, 'Feature Relevance': f_importances})
+    feature_dataframe['Mean'] = feature_dataframe.mean(axis=1)
 
     feature_data = DataFrame({'Feature': cols, 'Feature Relevance': feature_dataframe['Mean'].values})
     feature_data = feature_data.sort_values(by='Feature Relevance', ascending=False)
 
     plt.figure(figsize=(10, 12))
-    plt.title('Average Feature Importance', fontsize=14)
+    plt.title('Average Feature Importance (XGBoost)', fontsize=14)
 
     s = sns.barplot(y='Feature', x='Feature Relevance', data=feature_data, orient='h', palette='coolwarm')
     s.set_xticklabels(s.get_xticklabels(), rotation=90)
 
+    plt.savefig(f'{getcwd()}/plots/features/feat_importance(XGBoost).svg', format='svg')
     plt.show()
 
 
-def calculate_importances(perm_importances, features_names):
+def calculate_importances(perm_importances, features_names, algorithm):
 
     features = array(features_names)
     sorted_idx = perm_importances.importances_mean.argsort()
 
     plt.barh(features[sorted_idx], perm_importances.importances_mean[sorted_idx])
-    plt.title('Permutation Feature Importance')
+    plt.title(f'Permutation Feature Importance ({algorithm})')
     plt.ylabel('Feature')
     plt.xlabel("Feature Relevance")
 
+    plt.savefig(f'{getcwd()}/plots/features/feat_importance({algorithm}).svg', format='svg')
     plt.show()
 
 
@@ -101,4 +121,20 @@ def plot_correlation_matrix(df, graph_width):
     plt.gca().xaxis.tick_bottom()
     plt.colorbar(corr_mat)
     plt.title(f'Correlation Matrix', fontsize=15)
+
+    plt.savefig(f'{getcwd()}/plots/correlation_matrix.svg', format='svg')
+    plt.show()
+
+
+def plot_selected_features(n_features, f_importances, attributes):
+
+    plt.figure(figsize=(8, 8))
+    plt.barh(range(n_features), f_importances, align='center')
+    plt.yticks(arange(n_features), attributes)
+
+    plt.title('Selected Features')
+    plt.xlabel('Feature importance')
+    plt.ylabel('Feature')
+
+    plt.savefig(f'{getcwd()}/plots/features/selected_feat.svg', format='svg')
     plt.show()
