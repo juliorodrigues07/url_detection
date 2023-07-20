@@ -16,7 +16,7 @@ def discretize_values(dataset, column):
 
     encoding = LabelEncoder()
 
-    # Discretize dataset values (bening, phishing, malware, ...) => [0, 1, 2, ...]
+    # Discretize dataset values (bening, defacement, malware, ...) => [0, 1, 2, ...]
     encoding.fit(dataset[column])
     dataset[column] = encoding.transform(dataset[column].copy())
 

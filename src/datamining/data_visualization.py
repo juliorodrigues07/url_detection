@@ -12,7 +12,7 @@ def dataset_stats(dataset):
     print(dataset.isna().sum())
     print(dataset.describe().transpose())
 
-    # {0, 1, 2, 3} ==> {benign, defacement, phishing, malware}
+    # {0, 1, 2, 3} ==> {benign, defacement, malware, phishing}
     print(dataset.groupby('type').mean().loc[3])
 
 
@@ -51,7 +51,7 @@ def pie_chart(dataset, names):
 
 def feature_dist(dataset, key):
 
-    # plt.title('Protocol')
+    plt.title(key.upper())
     sns.countplot(x=key, data=dataset, palette='Blues')
     plt.ylabel('Instances')
 
