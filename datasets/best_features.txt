@@ -1,0 +1,2 @@
+Optimal number of features: 11
+Best features: ['url_length', 'protocol', 'digits_qtd', 'dirs_qtd', 'fstdir_length', 'dots', 'hifens', 'slash', 'question', 'equals', 'exclamation']
