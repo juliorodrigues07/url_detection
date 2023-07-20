@@ -1,0 +1,3 @@
+algorithm: ball_tree
+n_neighbors: 9
+weights: distance
