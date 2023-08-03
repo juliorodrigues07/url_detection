@@ -10,3 +10,5 @@ mechanize==0.4.8
 beautifulsoup4==4.10.0
 random-user-agent==1.0.1
 pycryptodomex==3.17
+Flask==2.2.3
+Flask-Cors==3.0.10
