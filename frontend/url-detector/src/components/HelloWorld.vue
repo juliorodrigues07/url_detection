@@ -11,7 +11,7 @@
           <h2 class="text-center bg-primary text-white">URL Detector</h2>
           <hr>
           
-          <b-form @submit="onSubmit" @reset="onReset" class="w-50 text-center">
+          <b-form @submit="onSubmit" class="w-50 text-center">
 					
             <b-form-group class="input-form-control" id="form-url-group" label="URL" label-for="form-url-input">
               
@@ -35,7 +35,7 @@
 
             <b-form-group class="input-form-control" id="form-algorithm-group" label="Algorithm" label-for="form-algorithm-input">
               
-              <select v-model="selected">
+              <select v-model="selected" required>
                 <option disabled value="">Select an algorithm</option>
                 <option>Logistic Regression</option>
                 <option>XGBoost</option>
@@ -120,27 +120,65 @@
         this.selected = 'Select an algorithm';
       },
 
-      onSubmit(e) {
-        e.preventDefault();
+      checkInputs() {
         
-        // let check = this.checkInputs('create');
-        let check = false;
-        console.log(this.selected);
-        if (check) {
-
-          // const payload = {
-          //   Name: this.detectionForm.URL,
-          //   Algorithm: this.detectionForm.Algorithm
-          // };
-          // this.createElection(payload);
-          this.clearForm();
+        let validURL = false;
+        let urlInput = document.getElementById('form-url-input');
+        
+        try { 
+          validURL = Boolean(new URL(this.detectionForm.URL));
+        } catch(e) { 
+          validURL = false;
         }
+
+        if (validURL)
+          this.setSuccessFor(urlInput);
+        else 
+          this.setErrorFor(urlInput, 'Invalid URL.');
+
+        const formControls = document.querySelectorAll('.input-form-control');
+        
+        const formIsValid = [...formControls].every(formControl => {
+          return (formControl.className != 'input-form-control error');
+        });
+
+        return formIsValid;
       },
 
-      onReset(e) {
+      setSuccessFor(field) {
+
+        let formControl = field.parentElement;
+        formControl.className = 'input-form-control success';
+
+        setTimeout(function() {
+          formControl.className = 'input-form-control';
+        }, 2500);
+      },
+
+      setErrorFor(field, message) {
+
+        let formControl = field.parentElement;
+        let small = formControl.querySelector('b-small');
+
+        formControl.className = 'input-form-control error';
+        small.innerText = message;
+      },
+
+      onSubmit(e) {
         e.preventDefault();
+        let check = this.checkInputs();
+
+        if (check) {
+
+          const payload = {
+            Name: this.detectionForm.URL,
+            Algorithm: this.selected
+          };
+
+          this.classifyURL(payload);
+        }
+
         this.clearForm();
-        this.getDetections();
       },
     },
     
@@ -198,10 +236,10 @@
   }
 
   .input-form-control.error .exclamation {
-    color: #e74c3c;
+    color: #ff0000;
     position: relative;
-    bottom: 33px;
-    left: 228px;
+    bottom: 38px;
+    left: 49%;
     visibility: visible;
   }
 
@@ -212,23 +250,23 @@
   .input-form-control.success .check {
     color: #73ff00;
     position: relative;
-    bottom: 33px;
-    left: 206px;
+    bottom: 40px;
+    left: 40%;
     visibility: visible;
   }
 
   .input-form-control.success input {
-    border: 2px solid #73ff00;
+    border: 4px solid #73ff00;
   }
 
   .input-form-control.error input {
-    border: 2px solid #e74c3c;
+    border: 4px solid #ff0000;
   }
 
   .input-form-control b-small {
     font-size: 14px;
-    position: absolute;
-    left: 5%;
+    position: relative;
+    right: 40%;
     margin-top: 5px;
     visibility: hidden;
   }
