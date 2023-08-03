@@ -37,8 +37,8 @@
               
               <select v-model="selected" required>
                 <option disabled value="">Select an algorithm</option>
-                <option>Logistic Regression</option>
-                <option>XGBoost</option>
+                <option value="LR">Logistic Regression</option>
+                <option value="XGB">XGBoost</option>
               </select>
 
             </b-form-group>
@@ -58,14 +58,14 @@
               <th scope="col">Algorithm</th>
             </tr>
           </thead>
-          <!-- <tbody v-for="detection, index in detections" :key="index">
+          <tbody v-for="detection, index in detections" :key="index">
             <tr>
               <td>{{ detection.URL }}</td>
               <td>{{ detection.Type }}</td>
               <td>{{ detection.Probability }}</td>
               <td>{{ detection.Algorithm }}</td>
             </tr>
-          </tbody> -->
+          </tbody>
         </table>
 
         <footer class="bg-primary text-white text-center" style="border-radius: 10px;">
@@ -94,7 +94,6 @@
         {
           'URL': ''
         },
-        msg: "Not working",
       };
     },
 
@@ -105,12 +104,27 @@
         axios
           .get(path)
           .then((res) => {
-            console.log(res.data);
-            this.msg = res.data;
+            this.detections = res.data.detections;
           })
 
           .catch((err) => {
-            console.error(err);
+            alert(err);
+          });
+      },
+
+      classifyURL(payload) {
+        
+        const path = 'http://localhost:5000';
+        
+        axios
+          .post(path, payload)
+          .then(() => {
+            this.getDetections();
+          })
+
+          .catch((err) => {
+            alert(err);
+            this.getDetections();
           });
       },
 
@@ -171,7 +185,7 @@
         if (check) {
 
           const payload = {
-            Name: this.detectionForm.URL,
+            URL: this.detectionForm.URL,
             Algorithm: this.selected
           };
 
