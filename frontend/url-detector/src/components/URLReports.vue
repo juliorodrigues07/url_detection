@@ -5,12 +5,14 @@
     
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" 
       integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
-      
+
+      <!--Header-->
       <div class="row">
         <div class="col-sm-12">
           <h2 class="text-center bg-primary text-white">URL Detector</h2>
-          <hr>
-          
+          <br>
+
+          <!--Form for URL and associated classifying algorithm submission-->
           <b-form @submit="onSubmit" class="w-50 text-center">
 					
             <b-form-group class="input-form-control" id="form-url-group" label="URL" label-for="form-url-input">
@@ -43,12 +45,13 @@
 
             </b-form-group>
 
-					<b-button class="sub-but" type="submit" variant="btn btn-success">Classify</b-button>
+          <b-button class="sub-but" type="submit" variant="btn btn-success">Classify</b-button>
 
-				</b-form>
+        </b-form>
 
         <br><br>
-        
+
+        <!--Table containing reports from recently classified URLs-->
         <table class="table table-hover">
           <thead>
             <tr>
@@ -58,8 +61,10 @@
               <th scope="col">Algorithm</th>
             </tr>
           </thead>
+
+          <!--TODO: Vertically center detection reports-->
           <tbody v-for="detection, index in detections" :key="index">
-            <tr>
+            <tr class="each-detect">
               <td>{{ detection.URL }}</td>
               <td>{{ detection.Type }}</td>
               <td>{{ detection.Probability }}</td>
@@ -72,8 +77,8 @@
           Copyright &copy;. All Rights Reserved 2023.
         </footer>
 
-				</div>
-			</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -84,7 +89,7 @@
   import axios from "axios";
 
   export default {
-    name: "HelloWorld",
+    name: "URLReports",
 
     data() {
       return {
@@ -94,11 +99,14 @@
         {
           'URL': ''
         },
+        // Regular expression to handle inputs, checking if it's a valid URL
+        validateURL: new RegExp(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi),
       };
     },
 
     methods: {
 
+      // GET method: Requests all recently classified URLs information for displaying
       getDetections() {
         const path = "http://localhost:5000";
         axios
@@ -112,10 +120,11 @@
           });
       },
 
+      // POST method: Sends the URL and selected algorithm for the application Back-end, which will classify the URL
       classifyURL(payload) {
-        
+
         const path = 'http://localhost:5000';
-        
+
         axios
           .post(path, payload)
           .then(() => {
@@ -128,30 +137,28 @@
           });
       },
 
-      clearForm() 
+      // Always clears form after each request, enhancing UX (Avoids having to delete field for every new request)
+      clearForm()
       {
         this.detectionForm.URL = '';
         this.selected = 'Select an algorithm';
       },
 
+      // Input handling by the user
       checkInputs() {
-        
-        let validURL = false;
-        let urlInput = document.getElementById('form-url-input');
-        
-        try { 
-          validURL = Boolean(new URL(this.detectionForm.URL));
-        } catch(e) { 
-          validURL = false;
-        }
 
-        if (validURL)
+        // Removes spaces from URL's edges ('  google .com ' => 'google .com')
+        let newURL = String(this.detectionForm.URL).trim();
+        let urlInput = document.getElementById('form-url-input');
+
+        // If it's a valid URL, the submission process can occur, else returns an error feedback message (verbal and visual)
+        if (newURL.match(this.validateURL))
           this.setSuccessFor(urlInput);
-        else 
+        else
           this.setErrorFor(urlInput, 'Invalid URL.');
 
         const formControls = document.querySelectorAll('.input-form-control');
-        
+
         const formIsValid = [...formControls].every(formControl => {
           return (formControl.className != 'input-form-control error');
         });
@@ -161,9 +168,11 @@
 
       setSuccessFor(field) {
 
+        // Changes the form field class to display visual feedback that the input is appropriate
         let formControl = field.parentElement;
         formControl.className = 'input-form-control success';
 
+        // Stops showing feedback after a 2,5 seconds delay
         setTimeout(function() {
           formControl.className = 'input-form-control';
         }, 2500);
@@ -174,6 +183,7 @@
         let formControl = field.parentElement;
         let small = formControl.querySelector('b-small');
 
+        // Changes the form field class to display verbal and visual feedback that the input is unsuitable
         formControl.className = 'input-form-control error';
         small.innerText = message;
       },
@@ -188,14 +198,13 @@
             URL: this.detectionForm.URL,
             Algorithm: this.selected
           };
-
           this.classifyURL(payload);
         }
 
         this.clearForm();
       },
     },
-    
+
     created() {
       this.getDetections();
     },
@@ -210,10 +219,30 @@
     border-radius: 10px;
   }
 
+  select {
+    padding: 10px;
+  }
+
+  table {
+    border-radius: 10px;
+    color: white;
+    background-color: #201c1c;
+    background-repeat: repeat;
+    background-position: center;
+  }
+
+  #form-url-input {
+    margin: 0 auto;
+    border-radius: 5px;
+    width: 90%;
+  }
+
   .jumbotron {
     position: absolute;
     width: 90%;
+    top: 5%;
     left: 5%;
+    background-image: url("../assets/cyber.jpg");
   }
 
   .input-form-control {
@@ -235,14 +264,8 @@
     margin-top: 30px;
   }
 
-  #form-url-input {
-    margin: 0 auto;
-    border-radius: 5px;
-    width: 90%;
-  }
-
-  select {
-    padding: 10px;
+  .each-detect:hover {
+    color: aqua;
   }
 
   .input-form-control .exclamation {
