@@ -10,7 +10,7 @@
 [![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 # URL Detector
 
-Malicious URL Detector built utilizing several data mining, machine learning and data science concepts, techniques and algorithms.
+Malicious URL Detector built utilizing several data mining, machine learning and data science concepts, techniques and algorithms (PAs 1 and 2 from Applied Data Mining course - DCOMP - UFSJ).
 
 # Requirements
 
@@ -117,6 +117,8 @@ All the project dependencies are listed is this section (languages, libraries, p
 All the instructions for exploring the project functionalities are listed in this section, as well as the commands to execute each application.
 
 ## Data Mining
+
+You can explore all functionalities (different models, datasets, ...) by just modifying (or uncommenting) few parts of the source code.
 
     python3 main.py
     
