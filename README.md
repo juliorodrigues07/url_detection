@@ -52,6 +52,10 @@ All the project dependencies are listed is this section (languages, libraries, p
 
       pip install pandas
 
+- [joblib](https://joblib.readthedocs.io/en/latest/index.html) library:
+ 
+      pip install joblib
+
 ## Data Visualization
        
 - [Matplotlib](https://matplotlib.org/) library:
@@ -61,10 +65,6 @@ All the project dependencies are listed is this section (languages, libraries, p
 - [seaborn](https://seaborn.pydata.org/) library:
  
       pip install seaborn
-      
-- [joblib](https://joblib.readthedocs.io/en/latest/index.html) library:
- 
-      pip install joblib
       
 - [numpy](https://numpy.org/) library:
 
@@ -90,11 +90,15 @@ All the project dependencies are listed is this section (languages, libraries, p
 
 ## GUI (Graphical User Interface - Optional)
 
+### Inside _url-detector_ directory
+
+- To install all GUI dependencies:
+
+      npm i
+
 - [Vue.js](https://vuejs.org/) framework:
 
       npm install -g @vue/cli
-
-### Inside _url-detector_ directory
 
 - [Bootstrap](https://vuejs.org/) framework:
 
@@ -107,10 +111,6 @@ All the project dependencies are listed is this section (languages, libraries, p
 - [Font Awesome](https://fontawesome.com/) tool kit:
 
       npm i --save @fortawesome/free-solid-svg-icons && npm i --save @fortawesome/vue-fontawesome@latest-2
-
-- To install all GUI dependencies:
-
-      npm i
 
 # Execution
 
