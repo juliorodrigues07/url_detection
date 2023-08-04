@@ -49,6 +49,13 @@
 
         </b-form>
 
+        <br>
+        <b-button class="clear-list" @click="clearTable()" variant="btn btn-secondary">
+          Clear&nbsp;
+          <span class="trash">
+            <font-awesome-icon icon="fa-solid fa-trash" style="height: 20px"></font-awesome-icon>
+          </span>
+        </b-button>
         <br><br>
 
         <!--Table containing reports from recently classified URLs-->
@@ -125,9 +132,13 @@
 
         const path = 'http://localhost:5000';
 
+        // TODO: Show possible errors loading the algorithms as dismissible pop-ups in the GUI
         axios
           .post(path, payload)
-          .then(() => {
+          .then((res) => {
+            let status = res.data.status;
+            if (String(status) === 'failed')
+              alert('It occurred an error loading the algorithm!');
             this.getDetections();
           })
 
@@ -198,11 +209,30 @@
             URL: this.detectionForm.URL,
             Algorithm: this.selected
           };
+
           this.classifyURL(payload);
         }
-
         this.clearForm();
       },
+
+      clearTable() {
+        const path = 'http://localhost:5000';
+        const payload = {'action': 'clear'}
+
+        axios
+          .post(path, payload)
+          .then((res) => {
+            let status = res.data.status;
+            if (String(status) === 'failed')
+              alert('The table is already empty!');
+            this.getDetections();
+          })
+
+          .catch((err) => {
+            alert(err);
+            this.getDetections();
+          });
+      }
     },
 
     created() {
@@ -254,14 +284,20 @@
     margin: 0 auto;
     padding: 20px;
     border-radius: 20px;
-    background-color: #201c1c;  
+    background-color: #201c1c;
     font-size: x-large;
   }
 
   .sub-but {
     font-size: large;
     border-radius: 5px;
+    border: 2px solid #73ff00;
     margin-top: 30px;
+  }
+
+  .clear-list {
+    border-radius: 5px;
+    border: 2px solid #201c1c;
   }
 
   .each-detect:hover {
@@ -312,4 +348,5 @@
     color: #ff0000;
     visibility: visible;
   }
+
 </style>
